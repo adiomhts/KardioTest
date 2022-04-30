@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
+from PyQt5.QtMultimedia import QSound
 
 from instr import *
 from second_win import *
@@ -21,7 +22,9 @@ class MainWin(QWidget):
         self.text_hello = QLabel(txt_hello)
         self.description = QLabel(txt_instruction)
         self.btn_next = QPushButton(txt_next)
+        
 
+        
         self.v_line = QVBoxLayout()
 
         self.v_line.addWidget(self.text_hello, alignment=Qt.AlignLeft)

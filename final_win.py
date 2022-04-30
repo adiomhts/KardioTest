@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout
+from PyQt5.QtGui import QPixmap
 
 from instr import *
 
@@ -93,10 +94,16 @@ class FinalWin(QWidget):
     def initUI(self):
         self.text1 = QLabel(txt_index + str(self.index))
         self.text2 = QLabel(txt_workheart + self.heart)
+        self.doc = QLabel(self)
+        self.pic = QPixmap('doc.png')
+        self.doc.setPixmap(self.pic)
+        self.doc.setScaledContents(True)
+
 
         self.v_line = QVBoxLayout()
 
         self.v_line.addWidget(self.text1, alignment=Qt.AlignCenter)
+        self.v_line.addWidget(self.doc)
         self.v_line.addWidget(self.text2, alignment=Qt.AlignCenter)
 
         self.setLayout(self.v_line)
