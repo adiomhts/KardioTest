@@ -1,6 +1,6 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTime, QTimer
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QLineEdit, QHBoxLayout
-from time import sleep
+from PyQt5.QtGui import QFont 
 
 from instr import *
 from final_win import *
@@ -58,11 +58,7 @@ class TestWin(QWidget):
         self.line_v1.addWidget(self.test2_2enter, alignment=Qt.AlignLeft)
         self.line_v1.addWidget(self.button_4, alignment=Qt.AlignCenter)
 
-        self.your_surname = self.surname_enter.text()
-        self.your_years = int(self.years_enter.text())
-        self.your_test1 = int(self.test1_enter.text())
-        self.your_test2 = int(self.test2_1enter.text())
-        self.your_test3 = int(self.test2_2enter.text())
+
 
         self.line_h.addLayout(self.line_v1)
         self.line_h.addLayout(self.line_v2)
@@ -71,112 +67,66 @@ class TestWin(QWidget):
 
     def next_click(self):
 
-        self.index = ((4 * (self.your_test1 + self.your_test2 + self.your_test3) - 200) / 10)
-
-
-        if self.your_years >= 15:
-            if self.index >= 15:
-                self.heart = txt_res1
-            if self.index >= 11 and self.index < 15:
-                self.heart = txt_res2
-            if self.index >= 6 and self.index < 11:
-                self.heart = txt_res3
-            if self.index >= 0.5 and self.index < 6:
-                self.heart = txt_res4
-            if self.index < 0.5:
-                self.heart = txt_res5
-
-        if self.your_years < 15 and self.your_years >= 13:
-            if self.index >= 16.5:
-                self.heart = txt_res1
-            if self.index >= 12.5 and self.index < 16.5:
-                self.heart = txt_res2
-            if self.index >= 7.5 and self.index < 12.5:
-                self.heart = txt_res3
-            if self.index >= 2 and self.index < 7.5:
-                self.heart = txt_res4
-            if self.index < 2:
-                self.heart = txt_res5
-
-        if self.your_years < 13 and self.your_years >= 11:
-            if self.index >= 18:
-                self.heart = txt_res1
-            if self.index >= 14 and self.index < 18:
-                self.heart = txt_res2
-            if self.index >= 9 and self.index < 14:
-                self.heart = txt_res3
-            if self.index >= 3.5 and self.index < 9:
-                self.heart = txt_res4
-            if self.index < 3.5:
-                self.heart = txt_res5
-
-        if self.your_years < 11 and self.your_years >= 9:
-            if self.index >= 19.5:
-                self.heart = txt_res1
-            if self.index >= 15.5 and self.index < 19.5:
-                self.heart = txt_res2
-            if self.index >= 10.5 and self.index < 15.5:
-                self.heart = txt_res3
-            if self.index >= 5 and self.index < 10.5:
-                self.heart = txt_res4
-            if self.index < 5:
-                self.heart = txt_res5
-
-        if self.your_years < 9:
-            if self.index >= 21:
-                self.heart = txt_res1
-            if self.index >= 17 and self.index < 21:
-                self.heart = txt_res2
-            if self.index >= 12 and self.index < 17:
-                self.heart = txt_res3
-            if self.index >= 6.5 and self.index < 12:
-                self.heart = txt_res4
-            if self.index < 6.5:
-                self.heart = txt_res5
-
         self.hide()
-        self.fw = FinalWin(self.index, self.heart)
+        self.fw = FinalWin(int(self.years_enter.text()), int(self.test1_enter.text()), int(self.test2_1enter.text()), int(self.test2_2enter.text()))
 
+    def timer_test(self):
+        global time
+        time = QTime(0, 0, 15)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.time1Event)
+        self.timer.start(1000)
 
-    def timer_15(self):
-        number = 0
-        self.seconds.setText('00:00:' + (str(number)))
-        for i in range(15):
-            sleep(1)
-            number += 1
-            self.seconds.setText('00:00:' + (str(number)))
+    def time1Event(self):
+        global time
+        time = time.addSecs(-1)
+        self.seconds.setText(time.toString("hh:mm:ss"))
+        self.seconds.setFont(QFont("Times", 40, QFont.Bold))
+        self.seconds.setStyleSheet("color: rgb(0, 0, 0)")
+        if time.toString("hh:mm:ss") == "00:00:00":
+            self.timer.stop()
 
-    def situps(self):
-        number = 0
-        self.seconds.setText(str(number))
-        for i in range(30):
-            sleep(1.5)
-            number += 1
-            self.seconds.setText(str(number))
+    def time_sits(self):
+        global time
+        time = QTime(0, 0, 30)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.time2Event)
+        self.timer.start(1500)
 
-    def timer_60(self):
-        number = 0
-        self.seconds.setStyleSheet('color: green')
-        self.seconds.setText('00:00:' + (str(number)))
-        for i in range(15):
-            sleep(1)
-            number += 1
-            self.seconds.setText('00:00:' + (str(number)))
-        self.seconds.setStyleSheet('color: black')
-        for i in range(30):
-            sleep(1)
-            number += 1
-            self.seconds.setText('00:00:' + (str(number)))
-        self.seconds.setStyleSheet('color: green')
-        for i in range(15):
-            sleep(1)
-            number += 1
-            self.seconds.setText('00:00:' + (str(number)))
+    def time2Event(self):
+        global time
+        time = time.addSecs(-1)
+        self.seconds.setText(time.toString("hh:mm:ss")[6:8])
+        self.seconds.setFont(QFont("Times", 40, QFont.Bold))
+        self.seconds.setStyleSheet("color: rgb(0, 0, 0)")
+        if (time.toString("hh:mm:ss")[6:8]) == "00":
+            self.timer.stop()
+
+    def time_last(self):
+        global time
+        time = QTime(0, 1, 0)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.time3Event)
+        self.timer.start(1000)
+
+    def time3Event(self):
+        global time
+        time = time.addSecs(-1)
+        self.seconds.setText(time.toString("hh:mm:ss"))
+        self.seconds.setFont(QFont("Times", 40, QFont.Bold))
+        self.seconds.setStyleSheet("color: rgb(0, 0, 0)")
+        if int(time.toString("hh:mm:ss")[6:8]) >= 45:
+            self.seconds.setStyleSheet("color: rgb(0, 255, 0)")
+        if int(time.toString("hh:mm:ss")[6:8]) <= 15:
+            self.seconds.setStyleSheet("color: rgb(0, 255, 0)")
+        if (time.toString("hh:mm:ss")) == "00:00:00":
+            self.timer.stop()
+
 
     def connects(self):
-        self.button_1.clicked.connect(self.timer_15)
-        self.button_2.clicked.connect(self.situps)
-        self.button_3.clicked.connect(self.timer_60)
+        self.button_1.clicked.connect(self.timer_test)
+        self.button_2.clicked.connect(self.time_sits)
+        self.button_3.clicked.connect(self.time_last)
         self.button_4.clicked.connect(self.next_click)
 
 
